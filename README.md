@@ -25,25 +25,3 @@ Launch the latest alpha release of the [Graphite editor](https://editor.graphite
 [![Vector artwork: "Valley of Spires"](https://static.graphite.rs/content/index/gui-demo-valley-of-spires__4.png)](https://editor.graphite.rs/#demo/valley-of-spires)
 
 *[Valley of Spires](https://editor.graphite.rs/#demo/valley-of-spires) (click to open this artwork and explore it yourself)*
-
-## Discord community
-
-[Join our Discord community](https://discord.graphite.rs) to chat with the community and development team. Feel free to lurk, ask questions, give suggestions, or get involved in the project. We are always seeking new collaborators to help test, design, and develop the software and this is where we communicate.
-
-## Building/contributing
-
-We need Rust and web developers! See [instructions here](https://graphite.rs/volunteer/guide/) for setting up the project and getting started.
-
-We are also in search of artists to create beautiful sample work in Graphite and illustrations for the website and social media. Please [get in touch](https://graphite.rs/contact/) if you are able to help out.
-
-By submitting code for inclusion in the project, you are agreeing to license your changes under the Apache 2.0 license, and that you have the authority to do so. Some directories may have other licenses, like dual-licensed MIT/Apache 2.0, and code submissions to those directories mean you agree to the applicable license(s).
-
-## Features and roadmap
-
-[See the web page for this information.](https://graphite.rs/features/)
-
-## Support the project
-
-Please consider [pledging a monthly donation](https://graphite.rs/donate/). Your contribution helps sustain this volunteer-run open source project and brings powerful, free creative tools to the masses.
-
-
