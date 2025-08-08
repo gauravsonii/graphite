@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Blog | {% set this = section | default(value = page) %}{{ this.title }}{% endblock title %}
+
+{% block head %}
+{% set this = section | default(value = page) %}
+<link rel="stylesheet" href="/article.css">
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{ this.title | safe }}.">
+<meta property="og:image" content="{{ this.extra.banner_png | safe }}">
+<meta property="og:url" content="{{ current_url | safe }}">
+{% endblock head %}
+
+{% block content %}
+{% set this = section | default(value = page) %}
+
+<section class="reading-material">
+	<div class="section">
+		<div class="details">
+			<h1 class="headline">{{ this.title }}</h2>
+			<span class="publication">By {{ this.extra.author }}. {{ this.date | date(format = "%B %d, %Y", timezone="America/Los_Angeles") }}.</span>
+			<img class="banner" src="{{ this.extra.banner | safe }}" onerror="this.onerror = null; this.src = this.src.replace('.avif', '.png')" />
+		</div>
+		<hr />
+		<article>
+			{{ this.content | safe }}
+		</article>
+		{% if this.extra.reddit or this.extra.twitter %}
+		<hr />
+		<div class="social">
+			{% if this.extra.reddit %}
+			<a href="{{ this.extra.reddit | safe }}" target="_blank" class="button arrow">
+				<img src="https://static.graphite.rs/icons/reddit.svg" /><span>Comment on Reddit</span>
+			</a>
+			{% endif %}
+			{% if this.extra.twitter %}
+			<a href="{{ this.extra.twitter | safe }}" target="_blank" class="button arrow">
+				<img src="https://static.graphite.rs/icons/twitter.svg" /><span>Comment on Twitter</span>
+			</a>
+			{% endif %}
+		</div>
+		{% endif %}
+	</div>
+</section>
+{% endblock content %}

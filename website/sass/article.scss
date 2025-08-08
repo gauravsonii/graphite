@@ -1,0 +1,29 @@
+.reading-material {
+	max-width: 800px;
+	flex: 0 1 auto;
+
+	.details {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+
+		.publication {
+			font-weight: 800;
+		}
+
+		.banner {
+			margin-top: 0;
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	.social {
+		width: 100%;
+		display: flex;
+		gap: calc(var(--font-size-link) * 0.8);
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+}

@@ -1,0 +1,117 @@
+name: "Editor: CI & Dev"
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+env:
+  CARGO_TERM_COLOR: always
+  INDEX_HTML_HEAD_REPLACEMENT: <script defer data-domain="dev.graphite.rs" data-api="https://graphite.rs/visit/event" src="https://graphite.rs/visit/script.hash.js"></script>
+
+jobs:
+  build:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    env:
+      RUSTC_WRAPPER: /usr/bin/sccache
+      CARGO_INCREMENTAL: 0
+      SCCACHE_DIR: /var/lib/github-actions/.cache
+
+    steps:
+      - name: 📥 Clone and checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🗑 Clear wasm-bindgen cache
+        run: rm -r ~/.cache/.wasm-pack || true
+
+      - name: 🟢 Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: 🚧 Install Node dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: 🦀 Update Rust to latest stable
+        run: |
+          rustc --version
+          rustup update stable
+          rustc --version
+
+      - name: ✂ Replace template in <head> of index.html
+        run: |
+          # Remove the INDEX_HTML_HEAD_REPLACEMENT environment variable for build links (not master deploys)
+          git rev-parse --abbrev-ref HEAD | grep master > /dev/null || export INDEX_HTML_HEAD_REPLACEMENT=""
+          sed -i "s|<!-- INDEX_HTML_HEAD_REPLACEMENT -->|$INDEX_HTML_HEAD_REPLACEMENT|" frontend/index.html
+
+      - name: 🌐 Build Graphite web code
+        env:
+          NODE_ENV: production
+        run: |
+          cd frontend
+          mold -run npm run build
+
+      - name: 📤 Publish to Cloudflare Pages
+        id: cloudflare
+        uses: cloudflare/pages-action@1
+        continue-on-error: true
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: graphite-dev
+          directory: frontend/dist
+
+      - name: 👕 Lint Graphite web formatting
+        env:
+          NODE_ENV: production
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: 🔬 Check Rust formatting
+        run: |
+          mold -run cargo fmt --all -- --check
+
+      - name: 🦀 Build Rust code
+        run: |
+          mold -run cargo build --all-features
+
+      - name: 🧪 Run Rust tests
+        run: |
+          mold -run cargo nextest run
+
+  # miri:
+  #   runs-on: self-hosted
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: 🧪 Run Rust miri
+  #       run: |
+  #         mold -run cargo +nightly miri nextest run -j32
+
+  cargo-deny:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clone and checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🔒 Check crate security advisories
+        uses: EmbarkStudios/cargo-deny-action@v1
+        with:
+          command: check advisories
+
+      - name: 📜 Check crate license compatibility
+        uses: EmbarkStudios/cargo-deny-action@v1
+        with:
+          command: check bans licenses sources

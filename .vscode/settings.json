@@ -1,0 +1,50 @@
+{
+	// Rust: save on format
+	"[rust]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true,
+		"editor.defaultFormatter": "rust-lang.rust-analyzer"
+	},
+	// Web: save on format
+	"[javascript][typescript][svelte]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		},
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+	"[scss]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		},
+		"editor.formatOnSave": true,
+		// Configured in `.prettierrc`
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json][jsonc][yaml][github-actions-workflow]": {
+		"editor.formatOnSave": true,
+		// Configured in `.prettierrc`
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	// Handlebars: don't save on format
+	// (`about.hbs` is used by Cargo About to encode license information)
+	"[handlebars]": {
+		"editor.formatOnSave": false
+	},
+	// Rust Analyzer config
+	"rust-analyzer.cargo.target": "wasm32-unknown-unknown",
+	"rust-analyzer.check.command": "clippy",
+	"rust-analyzer.cargo.buildScripts.overrideCommand": ["cargo", "check", "--quiet", "--message-format=json", "--all-targets", "-p", "graphite-wasm"], // Build scripts for Tauri aren't compatible with wasm32-unknown-unknown, so this restricts it to just our code entry point
+	"rust-analyzer.diagnostics.disabled": ["unresolved-macro-call"], // Remove when https://github.com/rust-lang/rust-analyzer/issues/6835 is fixed
+	// ESLint config
+	"eslint.format.enable": true,
+	"eslint.workingDirectories": ["./frontend", "./website/other/bezier-rs-demos", "./website"],
+	"eslint.validate": ["javascript", "typescript", "svelte"],
+	// VS Code config
+	"html.format.wrapLineLength": 200,
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.associations": {
+		"*.graphite": "json"
+	}
+}

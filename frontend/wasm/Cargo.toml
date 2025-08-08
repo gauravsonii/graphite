@@ -1,0 +1,69 @@
+[package]
+name = "graphite-wasm"
+publish = false
+version = "0.0.0"
+rust-version = "1.66.0"
+authors = ["Graphite Authors <contact@graphite.rs>"]
+edition = "2021"
+readme = "../../README.md"
+homepage = "https://graphite.rs"
+repository = "https://github.com/GraphiteEditor/Graphite"
+license = "Apache-2.0"
+
+[features]
+tauri = ["ron"]
+gpu = ["editor/gpu"]
+default = ["gpu"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+editor = { path = "../../editor", package = "graphite-editor" }
+graph-craft = { workspace = true }
+log = { workspace = true }
+graphene-core = { workspace = true, features = ["std", "alloc"] }
+serde = { workspace = true, features = ["derive"] }
+wasm-bindgen = { workspace = true }
+serde-wasm-bindgen = "0.6"
+js-sys = { workspace = true }
+wasm-bindgen-futures = { workspace = true }
+ron = { workspace = true, optional = true }
+bezier-rs = { workspace = true }
+# We don't have wgpu on multiple threads (yet) https://github.com/gfx-rs/wgpu/blob/trunk/CHANGELOG.md#wgpu-types-now-send-sync-on-wasm
+wgpu = { workspace = true, features = ["fragile-send-sync-non-atomic-wasm"] }
+meval = "0.2.0"
+
+[dependencies.web-sys]
+workspace = true
+features = [
+	"Window",
+	"CanvasRenderingContext2d",
+	"Document",
+	"HtmlCanvasElement",
+	"IdleRequestOptions"
+]
+
+[package.metadata.wasm-pack.profile.dev]
+wasm-opt = false
+
+[package.metadata.wasm-pack.profile.dev.wasm-bindgen]
+debug-js-glue = true
+demangle-name-section = true
+dwarf-debug-info = true
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Os"]
+
+[package.metadata.wasm-pack.profile.release.wasm-bindgen]
+debug-js-glue = false
+demangle-name-section = false
+dwarf-debug-info = false
+
+[package.metadata.wasm-pack.profile.profiling]
+wasm-opt = ["-Os", "-g"]
+
+[package.metadata.wasm-pack.profile.profiling.wasm-bindgen]
+debug-js-glue = true
+demangle-name-section = true
+dwarf-debug-info = true

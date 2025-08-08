@@ -1,0 +1,121 @@
+[workspace]
+members = [
+	"editor",
+	"proc-macros",
+	"frontend/wasm",
+	"frontend/src-tauri",
+	"node-graph/gcore",
+	"node-graph/gstd",
+	"node-graph/graph-craft",
+	"node-graph/graphene-cli",
+	"node-graph/interpreted-executor",
+	"node-graph/node-macro",
+	"node-graph/compilation-server",
+	"node-graph/compilation-client",
+	"node-graph/vulkan-executor",
+	"node-graph/wgpu-executor",
+	"node-graph/gpu-executor",
+	"node-graph/gpu-compiler/gpu-compiler-bin-wrapper",
+	"libraries/dyn-any",
+	"libraries/bezier-rs",
+	"website/other/bezier-rs-demos/wasm",
+]
+resolver = "2"
+exclude = ["node-graph/gpu-compiler"]
+
+[workspace.dependencies]
+specta = { git = "https://github.com/oscartbeaumont/specta.git", features = [
+	"glam",
+	"typescript",
+] }
+rustc-hash = "1.1.0"
+# wasm-bindgen upgrades may break various things so we pin the version
+wasm-bindgen = "=0.2.91"
+dyn-any = { path = "libraries/dyn-any", features = ["derive", "glam"] }
+graphene-core = { path = "node-graph/gcore" }
+graph-craft = { path = "node-graph/graph-craft", features = ["serde"] }
+# Remove the `rev` commit hash field once this merges: https://github.com/EmbarkStudios/rust-gpu/pull/1115 (and consider switching to a release version upon the next release)
+spirv-std = { git = "https://github.com/EmbarkStudios/rust-gpu.git", rev = "08e7559012ab6645cf36f6cce84426f9e34b88d9" }
+bytemuck = { version = "1.13", features = ["derive"] }
+async-trait = { version = "0.1" }
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["rustls", "rustls-tls", "json"] }
+futures = "0.3"
+log = { version = "0.4" }
+bitflags = { version = "2.4", features = ["serde"] }
+remain = "0.2.2"
+derivative = "2.2.0"
+tempfile = "3"
+thiserror = "1.0"
+anyhow = "1.0.66"
+proc-macro2 = "1"
+syn = { version = "2.0", default-features = false, features = ["full"] }
+quote = "1.0"
+axum = "0.6"
+chrono = "^0.4.23"
+ron = "0.8"
+fastnoise-lite = "1.1.0"
+wgpu-types = "0.17"
+wgpu = "0.19"
+wasm-bindgen-futures = { version = "0.4.36" }
+winit = "0.29"
+url = "2.4.0"
+tokio = { version = "1.29", features = ["fs", "io-std"] }
+# Remove the `rev` commit hash field once this merges: https://github.com/linebender/vello/pull/427
+vello = { git = "https://github.com/linebender/vello.git", rev = "f075f58fc50c569daf5ca720fe81b5fee946ce7f", version = "0.0.1" }
+vello_svg = { git = "https://github.com/linebender/vello.git", rev = "f075f58fc50c569daf5ca720fe81b5fee946ce7f", version = "0.0.1" }
+resvg = { version = "0.39" }
+rand = { version = "0.8.5", default-features = false }
+rand_chacha = { version = "0.3.1" }
+bezier-rs = { path = "libraries/bezier-rs", features = ["dyn-any"] }
+kurbo = { git = "https://github.com/linebender/kurbo.git", features = [
+	"serde",
+] }
+glam = { version = "0.25", default-features = false, features = ["serde"] }
+node-macro = { path = "node-graph/node-macro" }
+base64 = { version = "0.21" }
+image = { version = "0.24", default-features = false, features = ["png"] }
+rustybuzz = { version = "0.10.0" }
+num-derive = { version = "0.4" }
+num-traits = { version = "0.2.15", default-features = false, features = [
+	"i128",
+] }
+js-sys = { version = "=0.3.67" }
+web-sys = { version = "=0.3.67" }
+usvg = "0.39"
+spirv = "0.3"
+fern = { version = "0.6", features = ["colored"] }
+
+[profile.dev.package.graphite-editor]
+opt-level = 1
+
+# This is a mitigation for https://github.com/rustwasm/wasm-pack/issues/981
+# Which is needed because the node_registry function is too large
+[profile.dev.package.interpreted-executor]
+opt-level = 1
+
+[profile.dev.package.graphene-core]
+opt-level = 1
+
+[profile.dev.package.graphene-std]
+opt-level = 1
+
+[profile.dev.package.autoquant]
+opt-level = 3
+
+[profile.dev.package.image]
+opt-level = 3
+
+[profile.dev.package.rustc-hash]
+opt-level = 3
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+lto = "thin"
+
+[profile.profiling]
+inherits = "release"
+debug = true

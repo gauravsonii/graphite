@@ -1,0 +1,29 @@
+[package]
+name = "graph-craft"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[features]
+default = ["dealloc_nodes"]
+serde = ["dep:serde", "graphene-core/serde", "glam/serde", "bezier-rs/serde"]
+dealloc_nodes = []
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+graphene-core = { workspace = true, features = ["std"] }
+dyn-any = { path = "../../libraries/dyn-any", features = [
+	"log-bad-types",
+	"rc",
+	"glam",
+] }
+num-traits = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true, optional = true }
+glam = { workspace = true }
+base64 = { workspace = true }
+bezier-rs = { workspace = true }
+specta = { workspace = true }
+bytemuck = { workspace = true }
+rustc-hash = { workspace = true }

@@ -1,0 +1,33 @@
+# Keep this list in sync with those in `/deny.toml` and `/frontend/vite.config.ts`.
+accepted = [
+	"Apache-2.0 WITH LLVM-exception",
+	"Apache-2.0",
+	"BSD-2-Clause",
+	"BSD-3-Clause",
+	"BSL-1.0",
+	"CC0-1.0",
+	"ISC",
+	"MIT-0",
+	"MIT",
+	"MPL-2.0",
+	"OpenSSL",
+	"Unicode-DFS-2016",
+	"Zlib",
+]
+ignore-build-dependencies = true
+ignore-dev-dependencies = true
+workarounds = ["ring"]
+
+# https://raw.githubusercontent.com/briansmith/webpki/main/LICENSE
+# is the ISC license but test code within the repo is BSD-3-Clause, but is not compiled into the crate when we use it
+[webpki.clarify]
+license = "ISC"
+[[webpki.clarify.files]]
+path = "LICENSE"
+checksum = "5b698ca13897be3afdb7174256fa1574f8c6892b8bea1a66dd6469d3fe27885a"
+
+[rustls-webpki.clarify]
+license = "ISC"
+[[rustls-webpki.clarify.files]]
+path = "LICENSE"
+checksum = "5b698ca13897be3afdb7174256fa1574f8c6892b8bea1a66dd6469d3fe27885a"

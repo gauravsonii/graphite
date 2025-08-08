@@ -1,0 +1,31 @@
+[package]
+name = "graphite-proc-macros"
+publish = false
+version = "0.0.0"
+rust-version = "1.66.0"
+authors = ["Graphite Authors <contact@graphite.rs>"]
+edition = "2021"
+readme = "../README.md"
+homepage = "https://graphite.rs"
+repository = "https://github.com/GraphiteEditor/Graphite"
+license = "Apache-2.0"
+
+[lib]
+path = "src/lib.rs"
+proc-macro = true
+
+[features]
+default = ["serde-discriminant"]
+serde-discriminant = []
+
+[dependencies]
+proc-macro2 = { workspace = true }
+syn = { workspace = true }
+quote = { workspace = true }
+
+[dev-dependencies.editor]
+path = "../editor"
+package = "graphite-editor"
+
+[dev-dependencies]
+serde = { workspace = true }
